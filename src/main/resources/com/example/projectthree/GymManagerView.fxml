@@ -8,18 +8,19 @@
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/19">
+<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="631.0" prefWidth="839.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.projectthree.GymManagerController">
   <tabs>
     <Tab text="Add Membership">
       <content>
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                <children>
-                  <Separator layoutX="412.0" orientation="VERTICAL" prefHeight="370.0" prefWidth="0.0" />
+                  <Separator layoutX="409.0" orientation="VERTICAL" prefHeight="791.0" prefWidth="9.0" />
                   <GridPane layoutY="8.0" prefHeight="240.0" prefWidth="312.0">
                     <columnConstraints>
                       <ColumnConstraints hgrow="SOMETIMES" maxWidth="150.0" minWidth="10.0" prefWidth="112.0" />
@@ -37,16 +38,19 @@
                   <Label layoutX="23.0" layoutY="153.0" prefHeight="18.0" prefWidth="93.0" text="Date Of Birth" />
                   <Label layoutX="23.0" layoutY="215.0" text="Location" />
                   <Label layoutX="25.0" layoutY="271.0" text="MemberShip Type" />
-                  <RadioButton layoutX="143.0" layoutY="271.0" mnemonicParsing="false" text="Standard" />
-                  <RadioButton layoutX="143.0" layoutY="302.0" mnemonicParsing="false" text="Family" />
-                  <RadioButton layoutX="143.0" layoutY="333.0" mnemonicParsing="false" text="Premium" />
-                  <Button layoutX="308.0" layoutY="289.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="90.0" text="add" />
+                  <RadioButton fx:id="standard" layoutX="143.0" layoutY="271.0" mnemonicParsing="false" text="Standard">
+                     <toggleGroup>
+                        <ToggleGroup fx:id="food" />
+                     </toggleGroup></RadioButton>
+                  <RadioButton fx:id="family" layoutX="143.0" layoutY="302.0" mnemonicParsing="false" text="Family" toggleGroup="$food" />
+                  <RadioButton fx:id="premium" layoutX="143.0" layoutY="333.0" mnemonicParsing="false" text="Premium" toggleGroup="$food" />
+                  <Button fx:id="addButton" layoutX="308.0" layoutY="289.0" mnemonicParsing="false" onAction="#clickAdd" prefHeight="26.0" prefWidth="90.0" text="add" />
                   <Button layoutX="308.0" layoutY="329.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="97.0" text="remove" />
-                  <TextField layoutX="128.0" layoutY="31.0" prefHeight="26.0" prefWidth="169.0" />
-                  <TextField layoutX="128.0" layoutY="89.0" prefHeight="26.0" prefWidth="170.0" />
-                  <TextField layoutX="128.0" layoutY="149.0" prefHeight="26.0" prefWidth="171.0" />
-                  <TextField layoutX="128.0" layoutY="211.0" prefHeight="26.0" prefWidth="173.0" />
-                  <TextArea layoutX="415.0" layoutY="-5.0" prefHeight="375.0" prefWidth="186.0" />
+                  <TextField fx:id="fnameTextField" layoutX="128.0" layoutY="31.0" prefHeight="26.0" prefWidth="169.0" />
+                  <TextField fx:id="lnameTextField" layoutX="128.0" layoutY="89.0" prefHeight="26.0" prefWidth="170.0" />
+                  <TextField fx:id="dobTextField" layoutX="128.0" layoutY="149.0" prefHeight="26.0" prefWidth="171.0" />
+                  <TextField fx:id="locationTextField" layoutX="128.0" layoutY="211.0" prefHeight="26.0" prefWidth="173.0" />
+                  <TextArea fx:id="outputText" layoutX="414.0" layoutY="1.0" prefHeight="602.0" prefWidth="426.0" />
                </children></AnchorPane>
       </content>
     </Tab>

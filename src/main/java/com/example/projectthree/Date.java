@@ -1,4 +1,4 @@
-package com.example.projectthree.model;
+package com.example.projectthree;
 
 import java.util.Calendar;
 import java.util.StringTokenizer;
@@ -11,12 +11,6 @@ import java.util.StringTokenizer;
  * @author Michael Israel, Kangwei Zhu
  */
 public class Date implements Comparable<Date> {
-    private int year;
-    private int month;
-    private int day;
-    private static final int SMALLER = -1;
-    private static final int EQUAL = 0;
-    private static final int GREATER = 1;
     public static final int FIRSTDAYOFMONTH = 0;
     public static final int ZERO = 0;
     public static final int MONTHSINYEAR = 12;
@@ -28,6 +22,9 @@ public class Date implements Comparable<Date> {
     public static final int QUADRENNIAL = 4;
     public static final int CENTENNIAL = 100;
     public static final int QUATERCENTENNIAL = 400;
+    private static final int SMALLER = -1;
+    private static final int EQUAL = 0;
+    private static final int GREATER = 1;
     private static final int January = 1;
     private static final int February = 2;
     private static final int March = 3;
@@ -41,6 +38,9 @@ public class Date implements Comparable<Date> {
     private static final int November = 11;
     private static final int December = 12;
     private static final int ISPROBABLYDEAD = 1900;
+    private final int year;
+    private final int month;
+    private final int day;
 
     /**
      * This is a constructor method for Date class that creates an object with today’s date
@@ -131,9 +131,7 @@ public class Date implements Comparable<Date> {
     public boolean isLeapYear() {
         if (year % QUADRENNIAL == 0) {
             if (year % CENTENNIAL == 0) {
-                if (year % QUATERCENTENNIAL == 0) {
-                    return true;
-                }
+                return year % QUATERCENTENNIAL == 0;
             } else {
                 return true;
             }
@@ -148,11 +146,7 @@ public class Date implements Comparable<Date> {
      * @return true if date given is a valid date, false otherwise
      */
     public boolean isValidExpiration() {
-        if (!this.isValid()) {
-            return false;
-        } else {
-            return true;
-        }
+        return this.isValid();
     }
 
     /**

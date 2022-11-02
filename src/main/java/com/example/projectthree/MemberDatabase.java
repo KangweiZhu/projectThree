@@ -1,4 +1,10 @@
-package com.example.projectthree.model;
+package com.example.projectthree;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+
+import static com.example.projectthree.GymManagerController.*;
 
 /**
  * The MemberDatabase is the class that will store the Member object. It is a sequenceList datastructures.
@@ -249,6 +255,66 @@ public class MemberDatabase {
                 System.out.println(", Membership fee: $" + currMember.membershipFee());
             }
             System.out.println("-end of list-\n");
+        }
+    }
+
+    /**
+     * This method handles "LM" command, which loads the historical member information from a text file to the member
+     * database.
+     */
+    public void loadMembers() {
+        String fileName = "memberList.txt";
+        String[] lines = readFiles(fileName);
+        System.out.println("\n-list of members loaded-");
+        for (int i = 1; i < lines.length; i++) {
+            String cmdLine = lines[i];
+            String[] infos = cmdLine.split("\\s+");
+            String firstName = infos[INDEX_OF_FIRSTNAME - 1];
+            String lastName = infos[INDEX_OF_LASTNAME - 1];
+            Date dob = new Date(infos[INDEX_OF_DOB - 1]);
+            Date expireDate = new Date(infos[INDEX_OF_EXPIRATION_DATE - 1]);
+            String location = infos[INDEX_OF_LOCATION + 1];
+            Location newLocation = Location.valueOf(location.toUpperCase());
+            /*if (isValidLocation(location)) {
+                newLocation = Location.valueOf(location.toUpperCase());
+                Member pastMember = new Member(firstName, lastName, dob, expireDate, newLocation);
+                add(pastMember);
+                System.out.println(pastMember.toString());
+            }*/
+            Member pastMember = new Member(firstName, lastName, dob, expireDate, newLocation);
+            add(pastMember);
+        }
+        System.out.println("-end of list-\n");
+    }
+
+    /**
+     * This method is used when reading lines from text file.
+     *
+     * @param fileName The name of file
+     * @return The String array that contains all the lines. Each element in this array is the one line in the text file.
+     */
+    private String[] readFiles(String fileName) {
+        File inputFile = new File(fileName);
+        try {
+            Scanner sc = new Scanner(inputFile);
+            String line;
+            int countNumOfLine = 0;
+            while (sc.hasNextLine()) {
+                line = sc.nextLine();
+                if (line == null || line.length() == 0) {
+                    break;
+                }
+                countNumOfLine++;
+            }
+            String[] lines = new String[countNumOfLine + 1];
+            lines[0] = Integer.toString(countNumOfLine);
+            sc = new Scanner(inputFile);
+            for (int i = 1; i < lines.length; i++) {
+                lines[i] = sc.nextLine();
+            }
+            return lines;
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
         }
     }
 }

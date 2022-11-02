@@ -1,4 +1,4 @@
-package com.example.projectthree.model;
+package com.example.projectthree;
 
 /**
  * This enum class is for the creation and retrieving of a Time enum constant.

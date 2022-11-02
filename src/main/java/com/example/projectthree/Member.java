@@ -1,4 +1,4 @@
-package com.example.projectthree.model;
+package com.example.projectthree;
 
 /**
  * The Member class is for the creation and data manipulation of Member object. It is the root of the membership hierarchy

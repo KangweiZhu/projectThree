@@ -1,4 +1,4 @@
-package com.example.projectthree.model;
+package com.example.projectthree;
 
 /**
  * This enum is for the creation and retrieving of a Location enum constant.
@@ -70,4 +70,5 @@ public enum Location {
         }
         return firstCounty.compareTo(secondCounty);
     }
+
 }
