@@ -1,5 +1,10 @@
 package com.example.projectthree;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.Scanner;
+
 /**
  * ClassSchedule is the class that serve the function of storing all the fitnesses classes that this fitness chain has.
  * In this project all the FitnessClasses is stored in an array
@@ -9,6 +14,7 @@ package com.example.projectthree;
 public class ClassSchedule {
     private FitnessClass[] fitnessClasses;
     private int numClasses;
+    private ArrayList<String> warning = new ArrayList<>();
 
     /**
      * Constructor method without parameter.
@@ -28,6 +34,36 @@ public class ClassSchedule {
     public ClassSchedule(FitnessClass[] fitnessClasses, int numClasses) {
         this.fitnessClasses = fitnessClasses;
         this.numClasses = numClasses;
+    }
+
+    /**
+     * This method return the warning arraylist, which is the array of Strings that going to be shown on the textArea
+     * @return the warning ArrayList that holds Strings.
+     */
+    public ArrayList<String> getWarning() {
+        return this.warning;
+    }
+
+    public void LS(File classSchedule) {
+        warning.clear();
+        String[] lines = readFiles(classSchedule);
+        FitnessClass[] fitnessClasses = new FitnessClass[Integer.parseInt(lines[0])];
+        int index = 0;
+        for (int i = 1; i < lines.length; i++) {
+            String cmdLine = lines[i];
+            String[] infos = cmdLine.split("\\s");
+            String location = infos[GymManagerController.INDEX_OF_LOCATION].toUpperCase();
+            Time classTime = Time.valueOf(infos[GymManagerController.INDEX_OF_DAYTIME].toUpperCase());
+            Location classLocation = Location.valueOf(infos[GymManagerController.INDEX_OF_LOCATION].toUpperCase());
+            if (isValidLocation(location)) {
+                FitnessClass fitnessClass = new FitnessClass(infos[GymManagerController.INDEX_OF_CLASS_NAME], infos[GymManagerController.INDEX_OF_INSTRUCTOR],
+                        classTime, classLocation);
+                fitnessClasses[index++] = fitnessClass;
+            }
+        }
+        this.fitnessClasses = fitnessClasses;
+        this.numClasses = fitnessClasses.length;
+        printClassSchedule();
     }
 
     /**
@@ -52,11 +88,11 @@ public class ClassSchedule {
      * This method is used when displaying all the fitness class schedule.
      */
     public void printClassSchedule() {
-        System.out.println("-Fitness classes loaded-");
+        warning.add("-Fitness classes loaded-");
         for (int i = 0; i < numClasses; i++) {
-            System.out.println(fitnessClasses[i].toString());
+            warning.add(fitnessClasses[i].toString());
         }
-        System.out.println("-end of class list.");
+        warning.add("-end of class list.");
     }
 
     /**
@@ -66,6 +102,7 @@ public class ClassSchedule {
      * @return true if it exists, otherwise false.
      */
     public boolean isFitnessClassExist(FitnessClass checkClass) {
+        warning.clear();
         String className = checkClass.getFitnessClassName();
         String instructor = checkClass.getInstructor();
         Location location = checkClass.getLocation();
@@ -88,13 +125,13 @@ public class ClassSchedule {
             }
         }
         if (!nameFlag) {
-            System.out.println(className + " - class does not exist.");
+            warning.add(className + " - class does not exist.");
             return false;
         } else if (!instructorFlag) {
-            System.out.println(instructor + " - instructor does not exist.");
+            warning.add(instructor + " - instructor does not exist.");
             return false;
         } else {
-            System.out.println(className + " by " + instructor + " does not exist at " + location);
+            warning.add(className + " by " + instructor + " does not exist at " + location);
             return false;
         }
     }
@@ -113,4 +150,51 @@ public class ClassSchedule {
         }
         return null;
     }
+
+    /**
+     * The method is used to see if a fitness class located at a location.
+     *
+     * @param loc The location of a fitness class
+     * @return true if there is a fitness class located at the location. false otherwise
+     */
+    private boolean isValidLocation(String loc) {
+        for (Location location : Location.values()) {
+            if (location.toString().equalsIgnoreCase(loc)) {
+                return true;
+            }
+        }
+        warning.add(loc + ": invalid location!");
+        return false;
+    }
+
+    /**
+     * This method is used when reading lines from text file.
+     *
+     * @param inputFile The file that are going to be read
+     * @return The String array that contains all the lines. Each element in this array is the one line in the text file.
+     */
+    private String[] readFiles(File inputFile) {
+        try {
+            Scanner sc = new Scanner(inputFile);
+            String line;
+            int countNumOfLine = 0;
+            while (sc.hasNextLine()) {
+                line = sc.nextLine();
+                if (line == null || line.length() == 0) {
+                    break;
+                }
+                countNumOfLine++;
+            }
+            String[] lines = new String[countNumOfLine + 1];
+            lines[0] = Integer.toString(countNumOfLine);
+            sc = new Scanner(inputFile);
+            for (int i = 1; i < lines.length; i++) {
+                lines[i] = sc.nextLine();
+            }
+            return lines;
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }

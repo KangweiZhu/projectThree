@@ -1,34 +1,47 @@
 package com.example.projectthree;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+
+import java.io.File;
+import java.util.ArrayList;
 
 import static com.example.projectthree.Date.VALIDAGE;
 
 public class GymManagerController {
+    protected static final int INDEX_OF_CLASS_NAME = 0;
+    protected static final int MODE_C = 0;
+    protected static final int MODE_D = 1;
+    protected static final int MODE_CG = 2;
+    protected static final int MODE_DG = 3;
+    protected static final int INDEX_OF_INSTRUCTOR = 1;
     protected static final int INDEX_OF_FIRSTNAME = 1;
     protected static final int INDEX_OF_LASTNAME = 2;
+    protected static final int INDEX_OF_DAYTIME = 2;
     protected static final int INDEX_OF_DOB = 3;
-    protected static final int MEMBER_AND_FAMILY_EXPIRE = 3;
     protected static final int INDEX_OF_LOCATION = 3;
+    protected static final int MEMBER_AND_FAMILY_EXPIRE = 3;
     protected static final int INDEX_OF_EXPIRATION_DATE = 4;
+    protected static final int INDEX_OF_CHECKIN_FNAME = 4;
+    protected static final int INDEX_OF_CHECKIN_LNAME = 5;
+    protected static final int INDEX_OF_CHECKIN_DOB = 6;
+
     MemberDatabase memberDB = new MemberDatabase();
     ClassSchedule classSchedule = new ClassSchedule();
     private int countAttempts;
     @FXML
     private TextField fnameTextField;
-
     @FXML
     private TextField lnameTextField;
-
     @FXML
     private TextField dobTextField;
-
     @FXML
     private TextField locationTextField;
-
     @FXML
     private RadioButton standard;
     @FXML
@@ -37,6 +50,8 @@ public class GymManagerController {
     private RadioButton premium;
     @FXML
     private TextArea outputText;
+    @FXML
+    private TextArea infoCenterTextField;
 
     public GymManagerController() {
         this.countAttempts = 1;
@@ -48,7 +63,7 @@ public class GymManagerController {
      * Text Field, then create a Member object and do the checks before add this object to the member Database.
      */
     @FXML
-    private void clickAdd() {
+    void clickAdd(ActionEvent event) {
         printCountAttempts();
         String fname = fnameTextField.getText();
         String lname = lnameTextField.getText();
@@ -75,15 +90,86 @@ public class GymManagerController {
     }
 
     @FXML
-    private void loadMemberList() {
+    void loadClassScheduleList(ActionEvent event) {
+        printCountAttempts();
+        File textClassSchedule = importFile("classSchedule");
+        if (classSchedule != null) {
+            outputText.appendText("The absolute path of the file you choose is: "
+                    + textClassSchedule.getAbsolutePath() + "\n");
+            classSchedule.LS(textClassSchedule);
+            displayInfo(classSchedule.getWarning(), outputText);
+        }
+    }
 
+    @FXML
+    void loadMemberList(ActionEvent event) {
+        printCountAttempts();
+        File memberList = importFile("memberList");
+        if (memberList != null) {
+            outputText.appendText("The absolute path of the file you choose is: " + memberList.getAbsolutePath()
+                    + "\n");
+            memberDB.LM(memberList);
+            displayInfo(memberDB.getDbWarning(), outputText);
+        }
+    }
+
+    @FXML
+    void defaultPrint(ActionEvent event) {
+        if (memberDB.getSize() != 0) {
+            infoCenterTextField.appendText("-list of members-\n");
+        }
+        memberDB.getDbWarning().clear();
+        memberDB.print();
+        displayInfo(memberDB.getDbWarning(), infoCenterTextField);
+    }
+
+
+    @FXML
+    void viewByName(ActionEvent event) {
+        memberDB.printByName();
+        displayInfo(memberDB.getDbWarning(), infoCenterTextField);
+    }
+
+    @FXML
+    void viewByCounty(ActionEvent event) {
+        memberDB.printByCounty();
+        displayInfo(memberDB.getDbWarning(), infoCenterTextField);
+    }
+
+    @FXML
+    void viewByExpirationDate(ActionEvent event) {
+        memberDB.printByExpirationDate();
+        displayInfo(memberDB.getDbWarning(), infoCenterTextField);
+    }
+
+    @FXML
+    void viewByMembershipFees(ActionEvent event) {
+        memberDB.printByMembershipFees();
+        displayInfo(memberDB.getDbWarning(), infoCenterTextField);
+    }
+
+    /**
+     * This method is used when you click the import button, it will pop up a new window and enable you to select the
+     * file you want
+     *
+     * @param fileName The name of file. At here we only suppose to have memberList and classSchedule
+     * @return
+     */
+    private File importFile(String fileName) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("choose " + fileName + " from your file system");
+        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Text Files", "*.txt"),
+                new FileChooser.ExtensionFilter("All Files", "*.*"));
+        Stage stage = new Stage();
+        File sourceFile = fileChooser.showOpenDialog(stage);
+        return sourceFile;
     }
 
     /**
      * This method will check in a member into the memberDB
      *
      * @param newMember The Member object that will be checked in
-     * @param location  The register location of that member
+     * @param location  The register location of that member going to be registered
      * @param addType   0 : Member Object
      *                  1: Family Object which extends Member Object
      *                  -1: Premium Object which extends Family Object
@@ -210,8 +296,14 @@ public class GymManagerController {
      * This is the method that will count how many times we make any actions(events)
      */
     private void printCountAttempts() {
-        outputText.appendText("-----------------------------------------------\n" + "Line " + countAttempts + ":  ");
+        outputText.appendText("-----------------------------------------------\n" + "Line " + countAttempts + ":  " + "\n");
         countAttempts++;
     }
 
+    private void displayInfo(ArrayList<String> alst, TextArea textArea) {
+        for (int i = 0; i < alst.size(); i++) {
+            textArea.appendText(alst.get(i) + "\n");
+        }
+        textArea.appendText("\n");
+    }
 }

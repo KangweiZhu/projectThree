@@ -1,9 +1,10 @@
 package com.example.projectthree;
 
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
-
+import java.util.ArrayList;
 import static com.example.projectthree.GymManagerController.*;
 
 /**
@@ -16,6 +17,7 @@ public class MemberDatabase {
     private static final int INCREMENT = 4;
     private Member[] mlist;
     private int size;
+    private static ArrayList<String> dbWarning = new ArrayList<>();
 
     /**
      * Initialize a newly created MemberDatabase object.
@@ -131,15 +133,14 @@ public class MemberDatabase {
      */
     public void print() {
         if (size == 0) {
-            System.out.println("Member database is empty!");
+            dbWarning.add("Member database is empty!");
         } else {
             for (int i = 0; i < size; i++) {
                 Member curMember = mlist[i];
-                printByType(curMember);
-                System.out.println();
+                String curMemberText = printByType(curMember);
+                dbWarning.add(curMemberText);
             }
-            System.out.println("-end of list-");
-            System.out.println();
+            dbWarning.add("-end of list-");
         }
     }
 
@@ -149,16 +150,32 @@ public class MemberDatabase {
      *
      * @param curMember The input member that are going to be displayed.
      */
-    public void printByType(Member curMember) {
+    public String printByType(Member curMember) {
         if (curMember instanceof Premium) {
-            System.out.print(curMember.toString() + ", (Premium) guest-pass remaining: " +
-                    ((Premium) curMember).getNumOfGuestPass());
+            return curMember.toString() + ", (Premium) guest-pass remaining: " +
+                    ((Premium) curMember).getNumOfGuestPass();
         } else if (curMember instanceof Family) {
-            System.out.print(curMember.toString() + ", (Family) Guest-pass remaining: "
-                    + ((Family) curMember).getNumOfGuestPass());
+            return curMember.toString() + ", (Family) Guest-pass remaining: "
+                    + ((Family) curMember).getNumOfGuestPass();
         } else {
-            System.out.print(curMember.toString());
+            return curMember.toString();
         }
+    }
+
+    /**
+     * The method is used to see if a fitness class located at a location.
+     *
+     * @param loc The location of a fitness class
+     * @return true if there is a fitness class located at the location. false otherwise
+     */
+    private boolean isValidLocation(String loc) {
+        for (Location location : Location.values()) {
+            if (location.toString().equalsIgnoreCase(loc)) {
+                return true;
+            }
+        }
+        dbWarning.add(loc + ": invalid location!");
+        return false;
     }
 
     /**
@@ -177,11 +194,11 @@ public class MemberDatabase {
      * Sort the database Member objects by county name, if county name is equal, then sort by zipcode.
      */
     public void printByCounty() {
+        dbWarning.clear();
         if (size == 0) {
             print();
         } else {
-            System.out.println();
-            System.out.println("-list of members sorted by county and zipcode-");
+            dbWarning.add("-list of members sorted by county and zipcode-");
             for (int i = 1; i < size; i++) {
                 for (int j = i; j > 0; j--) {
                     if (mlist[j - 1].getLocation().compareLocation(mlist[j].getLocation()) > 0) {
@@ -201,11 +218,11 @@ public class MemberDatabase {
      * Sort the database Member objects by its expiration date.
      */
     public void printByExpirationDate() {
+        dbWarning.clear();
         if (size == 0) {
             print();
         } else {
-            System.out.println();
-            System.out.println("-list of members sorted by membership expiration date-");
+            dbWarning.add("-list of members sorted by membership expiration date-");
             for (int i = size - 1; i > 0; i--) {
                 for (int j = 0; j < i; j++) {
                     if (mlist[j].getExpire().compareTo(mlist[j + 1].getExpire()) > 0) {
@@ -223,11 +240,11 @@ public class MemberDatabase {
      * Sort the database Member objects by its first name and last name. First check first name, then check last name.
      */
     public void printByName() {
+        dbWarning.clear();
         if (size == 0) {
             print();
         } else {
-            System.out.println();
-            System.out.println("-list of members sorted by last name, and first name-");
+            dbWarning.add("-list of members sorted by last name, and first name-");
             for (int i = size - 1; i > 0; i--) {
                 for (int j = 0; j < i; j++) {
                     if (mlist[j].compareTo(mlist[j + 1]) > 0) {
@@ -245,16 +262,18 @@ public class MemberDatabase {
      * Print the current list with the membership Fees. (for next billing statement and regardless the expiration date)
      */
     public void printByMembershipFees() {
+        dbWarning.clear();
         if (size == 0) {
             print();
         } else {
-            System.out.println("-list of members with membership fees-");
+            dbWarning.add("-list of members with membership fees-");
             for (int i = 0; i < size; i++) {
                 Member currMember = mlist[i];
-                printByType(currMember);
-                System.out.println(", Membership fee: $" + currMember.membershipFee());
+                String curInfo = printByType(currMember);
+                curInfo += (", Membership fee: $" + currMember.membershipFee());
+                dbWarning.add(curInfo);
             }
-            System.out.println("-end of list-\n");
+            dbWarning.add("-end of list-\n");
         }
     }
 
@@ -262,10 +281,10 @@ public class MemberDatabase {
      * This method handles "LM" command, which loads the historical member information from a text file to the member
      * database.
      */
-    public void loadMembers() {
-        String fileName = "memberList.txt";
-        String[] lines = readFiles(fileName);
-        System.out.println("\n-list of members loaded-");
+    public void LM(File inputFile) {
+        dbWarning.clear();
+        String[] lines = readFiles(inputFile);
+        dbWarning.add("\n-list of members loaded-");
         for (int i = 1; i < lines.length; i++) {
             String cmdLine = lines[i];
             String[] infos = cmdLine.split("\\s+");
@@ -274,27 +293,32 @@ public class MemberDatabase {
             Date dob = new Date(infos[INDEX_OF_DOB - 1]);
             Date expireDate = new Date(infos[INDEX_OF_EXPIRATION_DATE - 1]);
             String location = infos[INDEX_OF_LOCATION + 1];
-            Location newLocation = Location.valueOf(location.toUpperCase());
-            /*if (isValidLocation(location)) {
+            Location newLocation = null;
+            if (isValidLocation(location)) {
                 newLocation = Location.valueOf(location.toUpperCase());
                 Member pastMember = new Member(firstName, lastName, dob, expireDate, newLocation);
                 add(pastMember);
-                System.out.println(pastMember.toString());
-            }*/
-            Member pastMember = new Member(firstName, lastName, dob, expireDate, newLocation);
-            add(pastMember);
+                dbWarning.add(pastMember.toString());
+            }
         }
-        System.out.println("-end of list-\n");
+        dbWarning.add("-end of list-\n");
+    }
+
+    public ArrayList<String> getDbWarning() {
+        return dbWarning;
+    }
+
+    public static void setDbWarning(ArrayList<String> dbWarning) {
+        MemberDatabase.dbWarning = dbWarning;
     }
 
     /**
      * This method is used when reading lines from text file.
      *
-     * @param fileName The name of file
+     * @param inputFile The file that are going to be read
      * @return The String array that contains all the lines. Each element in this array is the one line in the text file.
      */
-    private String[] readFiles(String fileName) {
-        File inputFile = new File(fileName);
+    private String[] readFiles(File inputFile) {
         try {
             Scanner sc = new Scanner(inputFile);
             String line;
