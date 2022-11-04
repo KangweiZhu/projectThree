@@ -72,7 +72,7 @@ public class FitnessClass {
     public void printSchedule() {
         if (studentsList.getSize() != 0) {
             fitnessClassInfos.add("- Participants -");
-            studentsList.printSchedule();
+            printDetail();
         }
         if (guestList.size() != 0) {
             fitnessClassInfos.add("- Guests -");
@@ -92,6 +92,17 @@ public class FitnessClass {
         }
     }
 
+    /**
+     * Print all the Member objects that are currently stored in database. Notice that this method is used for printing
+     * the all the members in one specific fitness database.
+     */
+    public void printDetail() {
+        for (int i = 0; i < studentsList.getSize(); i++) {
+            String curInfo = "  ";
+            curInfo += studentsList.getMlist()[i].toString();
+            fitnessClassInfos.add(curInfo);
+        }
+    }
     /**
      * Display the whole info of this Fitness Class and its schedule.
      */

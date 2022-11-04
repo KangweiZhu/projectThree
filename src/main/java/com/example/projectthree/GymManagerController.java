@@ -303,6 +303,7 @@ public class GymManagerController {
                     flag = fitnessClass.addGuest(member);
                     fitnessClassInfos.appendText(member.getFname() + " " + member.getLname() + " (guest) checked in "
                             + fitnessClass.toString() + "\n");
+                    fitnessClass.getFitnessClassInfos().clear();
                     fitnessClass.printSchedule();
                     displayInfo(fitnessClass.getFitnessClassInfos(), fitnessClassInfos);
                 } else {
@@ -500,9 +501,9 @@ public class GymManagerController {
                         fitnessClass.addMember(member);
                         fitnessClassInfos.appendText(fName + " " + lName + " checked in " +
                                 fitnessClass.toString() + "\n");
+                        //fitnessClass.getFitnessClassInfos().clear();
                         fitnessClass.printSchedule();
                         displayInfo(fitnessClass.getFitnessClassInfos(), fitnessClassInfos);
-                        fitnessClassInfos.appendText("\n");
                     } else {
                         if (fitnessClass.getLocation().compareLocation(member.getLocation()) == 0) {
                             flag = fitnessClass.addMember(member);

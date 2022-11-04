@@ -3,8 +3,9 @@ package com.example.projectthree;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.Scanner;
 import java.util.ArrayList;
+import java.util.Scanner;
+
 import static com.example.projectthree.GymManagerController.*;
 
 /**
@@ -15,9 +16,9 @@ import static com.example.projectthree.GymManagerController.*;
 public class MemberDatabase {
     public static final int NOT_FOUND = -1;
     private static final int INCREMENT = 4;
+    private static ArrayList<String> dbWarning = new ArrayList<>();
     private Member[] mlist;
     private int size;
-    private static ArrayList<String> dbWarning = new ArrayList<>();
 
     /**
      * Initialize a newly created MemberDatabase object.
@@ -28,6 +29,9 @@ public class MemberDatabase {
         size = 0;
     }
 
+    public Member[] getMlist(){
+        return this.mlist;
+    }
     /**
      * This method is for finding whether a Member object exists in this MemberDatabase object.
      *
@@ -176,18 +180,6 @@ public class MemberDatabase {
         }
         dbWarning.add(loc + ": invalid location!");
         return false;
-    }
-
-    /**
-     * Print all the Member objects that are currently stored in database. Notice that this method is used for printing
-     * the all the members in one specific fitness database.
-     */
-    public void printSchedule() {
-        for (int i = 0; i < size; i++) {
-            System.out.print("  ");
-            printByType(mlist[i]);
-            System.out.println();
-        }
     }
 
     /**
