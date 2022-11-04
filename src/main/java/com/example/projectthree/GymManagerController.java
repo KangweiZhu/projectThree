@@ -10,6 +10,7 @@ import javafx.stage.Stage;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 import static com.example.projectthree.Date.VALIDAGE;
 
@@ -122,15 +123,19 @@ public class GymManagerController {
 
     @FXML
     void clickRemove() {
-        String fname = fnameTextField.getText();
-        String lname = lnameTextField.getText();
-        String stringDob = dobTextField.getText();
-        Date date = new Date(stringDob);
-        Member member = new Member(fname, lname, date);
-        if (memberDB.remove(member)) {
-            outputText.appendText(member.getFname() + " " + member.getLname() + " removed.\n");
+        if (memberDB.getSize() == 0) {
+            outputText.appendText("Member Database is empty!\n");
         } else {
-            outputText.appendText(member.getFname() + " " + member.getLname() + " is not in the database.\n");
+            String fname = fnameTextField.getText();
+            String lname = lnameTextField.getText();
+            String stringDob = dobTextField.getText();
+            Date date = new Date(stringDob);
+            Member member = new Member(fname, lname, date);
+            if (memberDB.remove(member)) {
+                outputText.appendText(member.getFname() + " " + member.getLname() + " removed.\n");
+            } else {
+                outputText.appendText(member.getFname() + " " + member.getLname() + " is not in the database.\n");
+            }
         }
     }
 
@@ -178,6 +183,8 @@ public class GymManagerController {
             } else if (guestDrop.isSelected()) {
                 doCG(fitnessClass, newMember);
             }
+        }else{
+            displayInfo(classSchedule.getWarning(),fitnessClassInfos);
         }
     }
 
@@ -459,7 +466,8 @@ public class GymManagerController {
      * This is the method that will count how many times we make any actions(events)
      */
     private void printCountAttempts() {
-        outputText.appendText("-----------------------------------------------\n" + "Line " + countAttempts + ":  " + "\n");
+        outputText.appendText("-----------------------------------------------\n" + "Line " + countAttempts + ":  "
+                + "\n");
         countAttempts++;
     }
 
@@ -541,6 +549,4 @@ public class GymManagerController {
         }
         return false;
     }
-
-
 }
