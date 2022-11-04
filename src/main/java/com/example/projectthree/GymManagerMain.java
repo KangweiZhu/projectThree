@@ -4,10 +4,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-
-import java.io.IOException;
 
 public class GymManagerMain extends Application {
     @Override
@@ -20,7 +17,7 @@ public class GymManagerMain extends Application {
             scene = new Scene(root);
             stage.setTitle("Gym Manager");
             stage.setScene(scene);
-            //stage.setResizable(false);
+            stage.setResizable(false);
             stage.show();
         } catch (Exception e) {
             System.out.println("fxml file does not exist");

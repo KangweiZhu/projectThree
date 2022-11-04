@@ -284,7 +284,7 @@ public class MemberDatabase {
     public void LM(File inputFile) {
         dbWarning.clear();
         String[] lines = readFiles(inputFile);
-        dbWarning.add("\n-list of members loaded-");
+        dbWarning.add("-list of members loaded-");
         for (int i = 1; i < lines.length; i++) {
             String cmdLine = lines[i];
             String[] infos = cmdLine.split("\\s+");
@@ -301,7 +301,7 @@ public class MemberDatabase {
                 dbWarning.add(pastMember.toString());
             }
         }
-        dbWarning.add("-end of list-\n");
+        dbWarning.add("-end of list-");
     }
 
     public ArrayList<String> getDbWarning() {

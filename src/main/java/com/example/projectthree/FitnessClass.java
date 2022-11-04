@@ -15,7 +15,7 @@ public class FitnessClass {
     private final MemberDatabase studentsList = new MemberDatabase();
     private ArrayList<Member> guestList = new ArrayList<>();
     private Location location;
-
+    private ArrayList<String> fitnessClassInfos = new ArrayList<>();
     /**
      * Construct a FitnessClass object. Default constructor.
      */
@@ -71,22 +71,22 @@ public class FitnessClass {
      */
     public void printSchedule() {
         if (studentsList.getSize() != 0) {
-            System.out.println("- Participants -");
+            fitnessClassInfos.add("- Participants -");
             studentsList.printSchedule();
         }
         if (guestList.size() != 0) {
-            System.out.println("- Guests -");
+            fitnessClassInfos.add("- Guests -");
             for (int i = 0; i < guestList.size(); i++) {
-                System.out.print("  ");
+                fitnessClassInfos.add("  ");
                 Member curMember = guestList.get(i);
                 if (curMember instanceof Premium) {
-                    System.out.println(curMember.toString() + ", (Premium) guest-pass remaining: " +
+                    fitnessClassInfos.add(curMember.toString() + ", (Premium) guest-pass remaining: " +
                             ((Premium) curMember).getNumOfGuestPass());
                 } else if (curMember instanceof Family) {
-                    System.out.println(curMember.toString() + ", (Family) Guest-pass remaining: "
+                    fitnessClassInfos.add(curMember.toString() + ", (Family) Guest-pass remaining: "
                             + ((Family) curMember).getNumOfGuestPass());
                 } else {
-                    System.out.println(curMember.toString());
+                    fitnessClassInfos.add(curMember.toString());
                 }
             }
         }
@@ -96,7 +96,8 @@ public class FitnessClass {
      * Display the whole info of this Fitness Class and its schedule.
      */
     public void printInfo() {
-        System.out.println(this.toString());
+        fitnessClassInfos.clear();
+        fitnessClassInfos.add(this.toString());
         printSchedule();
     }
 
@@ -149,6 +150,9 @@ public class FitnessClass {
         return guestList.add(member);
     }
 
+    public ArrayList<String> getFitnessClassInfos(){
+        return fitnessClassInfos;
+    }
     /**
      * Drop a member from this fitness class's student list.
      *

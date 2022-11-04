@@ -88,6 +88,7 @@ public class ClassSchedule {
      * This method is used when displaying all the fitness class schedule.
      */
     public void printClassSchedule() {
+        warning.clear();
         warning.add("-Fitness classes loaded-");
         for (int i = 0; i < numClasses; i++) {
             warning.add(fitnessClasses[i].toString());

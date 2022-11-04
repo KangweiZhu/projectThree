@@ -17,6 +17,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
 
 <TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="758.0" prefWidth="987.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.projectthree.GymManagerController">
   <tabs>
@@ -49,7 +50,7 @@
                   <RadioButton fx:id="family" layoutX="143.0" layoutY="302.0" mnemonicParsing="false" text="Family" toggleGroup="$food" />
                   <RadioButton fx:id="premium" layoutX="143.0" layoutY="333.0" mnemonicParsing="false" text="Premium" toggleGroup="$food" />
                   <Button fx:id="addButton" layoutX="308.0" layoutY="289.0" mnemonicParsing="false" onAction="#clickAdd" prefHeight="26.0" prefWidth="90.0" text="add" />
-                  <Button layoutX="308.0" layoutY="329.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="97.0" text="remove" />
+                  <Button layoutX="308.0" layoutY="329.0" mnemonicParsing="false" onAction="#clickRemove" prefHeight="26.0" prefWidth="97.0" text="remove" />
                   <TextField fx:id="fnameTextField" layoutX="128.0" layoutY="31.0" prefHeight="26.0" prefWidth="169.0" />
                   <TextField fx:id="lnameTextField" layoutX="128.0" layoutY="89.0" prefHeight="26.0" prefWidth="170.0" />
                   <TextField fx:id="dobTextField" layoutX="128.0" layoutY="149.0" prefHeight="26.0" prefWidth="171.0" />
@@ -75,6 +76,33 @@
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                <children>
                   <Separator layoutX="412.0" layoutY="-1.0" orientation="VERTICAL" prefHeight="733.0" prefWidth="6.0" />
+                  <Label layoutX="27.0" layoutY="250.0" text="Member's First Name" />
+                  <Label layoutX="29.0" layoutY="399.0" text="Date Of Birth" />
+                  <Label layoutX="29.0" layoutY="89.0" text="ClassName" />
+                  <Label layoutX="28.0" layoutY="324.0" text="Member's Last Name" />
+                  <Label layoutX="29.0" layoutY="481.0" text="Location" />
+                  <Label layoutX="29.0" layoutY="169.0" text="Instructor Name" />
+                  <TextField fx:id="className" layoutX="176.0" layoutY="85.0" />
+                  <TextField fx:id="instructorName" layoutX="176.0" layoutY="165.0" />
+                  <TextField fx:id="memberFname" layoutX="176.0" layoutY="246.0" />
+                  <TextField fx:id="memberLname" layoutX="176.0" layoutY="320.0" />
+                  <TextField fx:id="dobFit" layoutX="176.0" layoutY="395.0" />
+                  <TextField fx:id="loc" layoutX="176.0" layoutY="477.0" />
+                  <VBox layoutX="184.0" layoutY="544.0" prefHeight="102.0" prefWidth="248.0" spacing="10.0">
+                     <children>
+                        <RadioButton fx:id="memberCheckIn" mnemonicParsing="false" text="Member Check In">
+                           <toggleGroup>
+                              <ToggleGroup fx:id="fitnessOption" />
+                           </toggleGroup>
+                        </RadioButton>
+                        <RadioButton fx:id="memberDrop" mnemonicParsing="false" prefHeight="18.0" prefWidth="235.0" text="Drop This Member From This Class" toggleGroup="$fitnessOption" />
+                        <RadioButton fx:id="guestCheckIn" mnemonicParsing="false" text="Guest Check In" toggleGroup="$fitnessOption" />
+                        <RadioButton fx:id="guestDrop" mnemonicParsing="false" text="Drop This Guest From This Class" toggleGroup="$fitnessOption" />
+                     </children>
+                  </VBox>
+                  <Button layoutX="323.0" layoutY="666.0" mnemonicParsing="false" onAction="#fitnessClassTransactions" text="Submit" />
+                  <TextArea fx:id="fitnessClassInfos" layoutX="415.0" layoutY="7.0" prefHeight="720.0" prefWidth="572.0" />
+                  <Button layoutX="915.0" layoutY="666.0" mnemonicParsing="false" onAction="#clearArea" text="clear" />
                </children>
             </AnchorPane>
       </content>
@@ -94,18 +122,22 @@
                               <MenuItem mnemonicParsing="false" onAction="#defaultPrint" text="Default View" />
                           </items>
                         </MenuButton>
-                        <MenuButton mnemonicParsing="false" prefHeight="26.0" prefWidth="244.0" text="View Fitness Class Schedule">
-                          <items>
-                            <MenuItem mnemonicParsing="false" text="Action 1" />
-                            <MenuItem mnemonicParsing="false" text="Action 2" />
-                          </items>
-                        </MenuButton>
+                        <Button mnemonicParsing="false" onAction="#viewClassSchedule" prefHeight="26.0" prefWidth="243.0" text="View ClassSchedule" />
                      </children>
                   </HBox>
                   <TextArea fx:id="infoCenterTextField" layoutX="258.0" layoutY="106.0" prefHeight="508.0" prefWidth="484.0" />
                </children>
             </AnchorPane>
          </content>
+      </Tab>
+      <Tab text="Test">
+        <content>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+               <children>
+                  <TextArea fx:id="testArea" prefHeight="725.0" prefWidth="987.0" />
+               </children>
+            </AnchorPane>
+        </content>
       </Tab>
   </tabs>
 </TabPane>
