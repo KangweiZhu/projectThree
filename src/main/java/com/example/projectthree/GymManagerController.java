@@ -501,7 +501,7 @@ public class GymManagerController {
                         fitnessClass.addMember(member);
                         fitnessClassInfos.appendText(fName + " " + lName + " checked in " +
                                 fitnessClass.toString() + "\n");
-                        //fitnessClass.getFitnessClassInfos().clear();
+                        fitnessClass.getFitnessClassInfos().clear();
                         fitnessClass.printSchedule();
                         displayInfo(fitnessClass.getFitnessClassInfos(), fitnessClassInfos);
                     } else {
@@ -509,6 +509,8 @@ public class GymManagerController {
                             flag = fitnessClass.addMember(member);
                             fitnessClassInfos.appendText(fName + " " + lName + " checked in " +
                                     fitnessClass.toString() + "\n");
+                            fitnessClass.getFitnessClassInfos().clear();
+                            fitnessClass.printSchedule();
                             displayInfo(fitnessClass.getFitnessClassInfos(), fitnessClassInfos);
                         } else {
                             fitnessClassInfos.appendText(fName + " " + lName + " checking in " +
